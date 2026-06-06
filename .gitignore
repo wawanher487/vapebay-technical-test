@@ -1,0 +1,20 @@
+# Node.js
+node_modules/
+.nuxt/
+.output/
+dist/
+
+# Laravel
+vendor/
+product-admin/storage/logs/*
+product-admin/.env
+
+# NestJS
+product-api/.env
+
+# Nuxt
+product-frontend/.env
+
+# OS
+.DS_Store
+Thumbs.db
