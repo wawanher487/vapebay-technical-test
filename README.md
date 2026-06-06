@@ -6,9 +6,9 @@ Aplikasi manajemen produk full-stack yang dibangun menggunakan NestJS, Nuxt.js, 
 
 Browser -> Nuxt.js Frontend (port 3000) -> NestJS API (port 3001) -> PostgreSQL Database
 
-Admin User -> Laravel Filament (port 8000) -> postgreSQL Database
+Admin User -> Laravel Filament (port 8000) -> PostgreSQL Database
 
-## Komponen Siste
+## Komponen Sistem
 
 - Nuxt.js Frontend digunakan oleh pengguna untuk melihat daftar produk, mencari produk, menambahkan produk, dan menggunakan fitur pagination.
 - NestJS API berfungsi sebagai backend yang menyediakan REST API untuk pengelolaan data produk serta melakukan validasi data.
@@ -23,12 +23,12 @@ Admin User -> Laravel Filament (port 8000) -> postgreSQL Database
 4. Data dikembalikan ke Frontend dalam format JSON.
 5. Administrator mengelola data produk melalui Laravel Filament yang terhubung langsung ke database PostgreSQL yang sama.
 
-## Tech STack
+## Tech Stack
 
 - Frontend | Nuxt.js 4, Tailwind CSS, Lucide Icons
 - Backend API | NestJS, TypeORM, PostgreSQL
 - Admin Panel | Laravel 12, Filament v5
-- Database | postgreSQL
+- Database | PostgreSQL
 - Infrastructure | Digital Ocean, Terraform
 
 ## Prasyarat
