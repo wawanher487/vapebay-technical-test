@@ -1,0 +1,83 @@
+# .gitlab-ci.yml
+# Pipeline ini terdiri dari 2 tahap: build dan deploy
+# Tahap deploy hanya mendeskripsikan langkah-langkah, tidak melakukan deployment nyata
+
+stages:
+  - build
+  - deploy
+
+# VARIABEL GLOBAL
+variables:
+  NODE_VERSION: "20"
+  PHP_VERSION: "8.2"
+
+# BUILD: NESTJS API
+build:nestjs:
+  stage: build
+  image: node:20-alpine
+  script:
+    - cd product-api
+    - npm ci # ci lebih strict dari install, cocok untuk pipeline
+    - npm run build # compile TypeScript → JavaScript di folder dist/
+  artifacts:
+    paths:
+      - product-api/dist/ # simpan hasil build untuk dipakai di tahap deploy
+    expire_in: 1 hour
+  only:
+    - main
+    - merge_requests
+
+# BUILD: NUXT.JS FRONTEND
+build:nuxtjs:
+  stage: build
+  image: node:20-alpine
+  script:
+    - cd product-frontend
+    - npm ci
+    - npm run build # generate .output/ folder (Nuxt build output)
+  artifacts:
+    paths:
+      - product-frontend/.output/
+    expire_in: 1 hour
+  only:
+    - main
+    - merge_requests
+
+# BUILD: LARAVEL FILAMENT
+build:laravel:
+  stage: build
+  image: php:8.2-cli
+  before_script:
+    - apt-get update && apt-get install -y zip unzip git
+    - curl -sS https://getcomposer.org/installer | php
+    - php composer.phar install --no-dev --optimize-autoloader
+  script:
+    - cd product-admin
+    - php composer.phar install --no-dev --optimize-autoloader
+    - php artisan config:cache # cache konfigurasi untuk performa
+    - php artisan route:cache # cache routes
+    - php artisan view:cache # cache blade views
+  only:
+    - main
+    - merge_requests
+
+# DEPLOY (DESKRIPSI)
+# Catatan: tahap deploy ini tidak melakukan deployment nyata.
+# Berikut adalah langkah-langkah yang akan dilakukan jika deployment diaktifkan:
+deploy:production:
+  stage: deploy
+  image: alpine:latest
+  script:
+    - echo "LANGKAH DEPLOYMENT KE DIGITAL OCEAN"
+    - echo "1. SSH ke Droplet Digital Ocean"
+    - echo "2. Pull kode terbaru dari repository"
+    - echo "3. NestJS - jalankan: npm ci && npm run build && pm2 restart api"
+    - echo "4. Nuxt.js - jalankan: npm ci && npm run build && pm2 restart frontend"
+    - echo "5. Laravel - jalankan: composer install && php artisan migrate --force"
+    - echo "6. Reload nginx untuk memastikan konfigurasi terbaru aktif"
+  environment:
+    name: production
+    url: https://vapebay.example.com
+  only:
+    - main # hanya deploy saat merge ke branch main
+  when: manual # perlu konfirmasi manual sebelum deploy
