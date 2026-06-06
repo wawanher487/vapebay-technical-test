@@ -131,6 +131,7 @@ DB_PASSWORD=your_password
 ```
 
 ```git bash
+php artisan migrate
 php artisan make:filament-user
 php artisan serve --port=8000
 # Admin panel berjalan di http://localhost:8000/admin
@@ -230,5 +231,3 @@ Jika menggunakan Terraform untuk provisioning, resource yang akan dibuat:
 3. **digitalocean_firewall** — Aturan firewall: izinkan port 80, 443, 22 (SSH), blokir akses langsung ke port 3001 dan 8000
 4. **digitalocean_domain** — Konfigurasi domain untuk aplikasi
 5. **digitalocean_record** — DNS record yang mengarahkan domain ke IP Droplet
-
-
